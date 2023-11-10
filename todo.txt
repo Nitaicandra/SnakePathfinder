@@ -1,0 +1,6 @@
+# delta time 
+# frame rate limiter
+
+
+
+#pygame.Color('gold')
