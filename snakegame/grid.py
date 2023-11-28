@@ -5,6 +5,9 @@ import snake_cell
 class Grid:
     def __init__(self):
         return
+        
+    def generate_apple():
+        return
     
     def draw_grid():
         return

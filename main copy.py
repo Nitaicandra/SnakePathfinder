@@ -1,6 +1,6 @@
 import pygame,sys
 sys.path.append("snakegame")
-from snakegame import Cell,Grid,SnakeCell,Snake,Window,Dijkstras,AStar
+from snakegame import Cell,Grid,SnakeCell,Snake,Window,Dijkstras,AStar,Button
 pygame.init()
 screen = pygame.display.set_mode((500,500))
 pygame.display.set_caption('SnakePathfinder')
@@ -9,9 +9,12 @@ clock = pygame.time.Clock()
 
 
 
+
 font = pygame.font.SysFont('Georgia',40, bold=True)
-surf = font.render('Quit', True, 'white')
+text = font.render('Quit', True, 'white')
 button = pygame.Rect(200,200,110,60)
+
+button = Button(screen)
 
 
 
@@ -33,16 +36,11 @@ while run:
             sys.exit()
             run = False
             
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if button.collidepoint(event.pos):
-                pygame.quit()
+        button.handle_click(event)
         
-    a,b = pygame.mouse.get_pos()
-    if button.x <= a <= button.x +110 and button.y<=b <=button.y+60:
-            pygame.draw.rect(screen,(180,180,180),button)
-    else:
-        pygame.draw.rect(screen,(110,110,110),button)
-    screen.blit(surf,(button.x+5, button.y+5))
+    button.handle_hover()
+    button.draw()
+
             
             
     
