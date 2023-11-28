@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 
 
 
-font = pygame.font.SysFont('Georgia',40, bold=True)
+font = pygame.font.SysFont('Georgia',40)
 text = font.render('Quit', True, 'white')
 button = pygame.Rect(200,200,110,60)
 
@@ -32,9 +32,10 @@ while run:
                 game_paused=True
     
         if event.type == pygame.QUIT:
+            run = False
             pygame.quit()
             sys.exit()
-            run = False
+            
             
         button.handle_click(event)
         
