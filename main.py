@@ -1,22 +1,56 @@
-import pygame,sys
+import pygame
+import sys
 
-from snakegame import Cell,Grid,SnakeCell,Snake,UI,Window,Dijkstras,AStar
+sys.path.append("snakegame")
+from snakegame import Grid, Snake
 
+# Window Dimensions
+width = 800
+height = 800
+
+# Grid Dimensions
+cell_size = 20
+grid_width = int(width / cell_size)
+grid_height = int(height / cell_size)
 
 pygame.init()
-screen = pygame.display.set_mode((400,500))
+screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
-test_surface = pygame.Surface((100,200)) #width and height of the surface
-test_surface.fill((0,0,255))
+
+surface = pygame.Surface((width, height))  # width and height of the surface
+surface.fill((0, 0, 255))
+
+game_grid = Grid(grid_width, grid_height, cell_size)
+snek = Snake(game_grid, grid_height, grid_width)
 
 while True:
+    # Tick Movement
+    # snek.move(0, snek.moving_direction, snek.snake_cells[0])
+    # Key input temporary to test snake movement
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    screen.fill((175,215,70))#fills the screen with a color
-    screen.blit(test_surface,(200,250)) #places the test surface at the middle orgin top left by default
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_a:
+                print("left")
+                snek.move(0, "left", snek.snake_cells[0])
+            if event.key == pygame.K_d:
+                print("right")
+                snek.move(0, "right", snek.snake_cells[0])
+            if event.key == pygame.K_w:
+                print("up")
+                snek.move(0, "up", snek.snake_cells[0])
+            if event.key == pygame.K_s:
+                print("down")
+                snek.move(0, "down", snek.snake_cells[0])
+            if event.key == pygame.K_SPACE:
+                print("append")
+                snek.append()
+
+    screen.fill((175, 215, 70))  # fills the screen with a color
+    screen.blit(surface, (0, 0))  # places the test surface at the middle origin top left by default
+
+    game_grid.draw_grid(surface)
     pygame.display.update()
-    clock.tick(60)#limits while loop to 60 fps # will replace with delta time at soem point
-    
-    
+    clock.tick(60)  # limits while loop to 60 fps # will replace with delta time at some point
