@@ -8,10 +8,14 @@ class Grid:
     # Cells are vertices with shape, color, and food distance
 
     def __init__(self, grid_width, grid_height, cell_size):
-        self.cells = [[cell.Cell(cell_size) for j in range(grid_height)] for i in range(grid_width)]
+        
         self.width = grid_width
         self.height = grid_height
         self.cell_size = cell_size
+        
+        #width then height (0,0)is in the 
+        #height then width, increasing height moves it down on the page, top right corner is 0,0
+        self.cells = [[cell.Cell(cell_size,i,j) for j in range(grid_height)] for i in range(grid_width)]
 
         for i in range(0, grid_height):
             for j in range(0, grid_width):

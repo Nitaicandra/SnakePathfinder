@@ -21,9 +21,11 @@ surface = pygame.Surface((width, height))  # width and height of the surface
 surface.fill((0, 0, 255))
 
 game_grid = Grid(grid_width, grid_height, cell_size)
+game_grid.cells[0][1].color = pygame.Color([255, 0, 255, 1])
 snek = Snake(game_grid, grid_height, grid_width)
 
 while True:
+
     # Tick Movement
     # snek.move(0, snek.moving_direction, snek.snake_cells[0])
     # Key input temporary to test snake movement

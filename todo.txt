@@ -4,3 +4,17 @@
 
 
 #pygame.Color('gold')
+
+
+
+create manual play button
+create dijkstart play
+create astar play
+show both split screen
+create show data button
+run new data
+read write csv using pandas 
+use time module to get the time of 
+create pandas 
+create astar
+make astar show considered nodes current path and selected path

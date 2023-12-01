@@ -2,11 +2,35 @@ import pygame, sys
 import cell
 import grid
 import random
+import snake_cell
 from enum import Enum
 
 
 # probably just a head and tail to snake cells # form a sort of linked list
 class Snake:
+
+    def __init__(self):
+        self.head=None
+        self.tail=None
+    #'''
+    def StartAt(self, game_grid, x, y):
+        self.head =snake_cell(game_grid[y][x])
+        
+        return
+    
+    def StartRandomly(self, game_grid, grid_height, grid_width):
+            random_y =random.randint(0, grid_height - 1)
+            random_x =random.randint(0, grid_width - 1)
+            self.head =snake_cell(game_grid[random_y][random_x])
+            self.tail=self.head
+            self.dir = None
+            return
+    def append(self):
+        self.tail
+    #get dir boolean?
+
+    #'''
+    '''
     snake_cells = list()
     moving_direction = "left"
     tail_direction = "right"
@@ -75,3 +99,4 @@ class Snake:
             self.snake_cells.append(self.tail.neighbors["down"])
             self.tail = self.snake_cells[len(self.snake_cells) - 1]
         self.tail.color = pygame.Color([34, 136, 76, 1])
+    '''
