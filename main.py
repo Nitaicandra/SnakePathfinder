@@ -22,7 +22,9 @@ surface.fill((0, 0, 255))
 
 game_grid = Grid(grid_width, grid_height, cell_size)
 game_grid.cells[0][1].color = pygame.Color([255, 0, 255, 1])
-snek = Snake(game_grid, grid_height, grid_width)
+ 
+snek = Snake()
+snek.StartRandomly(game_grid, grid_height, grid_width)
 
 while True:
 
@@ -36,16 +38,16 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 print("left")
-                snek.move(0, "left", snek.snake_cells[0])
+                snek.move("left")
             if event.key == pygame.K_d:
                 print("right")
-                snek.move(0, "right", snek.snake_cells[0])
+                snek.move("right")
             if event.key == pygame.K_w:
                 print("up")
-                snek.move(0, "up", snek.snake_cells[0])
+                snek.move("up")
             if event.key == pygame.K_s:
                 print("down")
-                snek.move(0, "down", snek.snake_cells[0])
+                snek.move("down")
             if event.key == pygame.K_SPACE:
                 print("append")
                 snek.append()

@@ -15,6 +15,8 @@ class Cell:
         self.x =x #position in grid
         self.y =y #y postion in grid index
         self.snake_cell = None # holds snake cell if present
+        self.is_fruit=False
         return
+        
     def default_color(self):
         self.color=pygame.Color([0, 0, 0, 1])

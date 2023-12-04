@@ -2,31 +2,66 @@ import pygame, sys
 import cell
 import grid
 import random
-import snake_cell
+from snake_cell import SnakeCell
 from enum import Enum
 
 
 # probably just a head and tail to snake cells # form a sort of linked list
 class Snake:
 
+    # i think having a custom linked list is a bit better cause u can have a double refrence in the grid 
+    #aka acess snake cells from standard cells to check if cell is a snake
     def __init__(self):
         self.head=None
         self.tail=None
+        self.size=1
+        dead = False
     #'''
     def StartAt(self, game_grid, x, y):
-        self.head =snake_cell(game_grid[y][x])
-        
+        self.head =SnakeCell(game_grid.cells[y][x])
+        self.tail=self.head
         return
     
     def StartRandomly(self, game_grid, grid_height, grid_width):
-            random_y =random.randint(0, grid_height - 1)
-            random_x =random.randint(0, grid_width - 1)
-            self.head =snake_cell(game_grid[random_y][random_x])
-            self.tail=self.head
-            self.dir = None
-            return
+        random_y =random.randint(0, grid_height - 1)
+        random_x =random.randint(0, grid_width - 1)
+        self.head =SnakeCell(game_grid.cells[random_y][random_x])
+        self.tail=self.head
+
+        return
+    def invert_direction(self,direction):
+        if direction=="up":
+            return "down"
+        elif direction=="down":
+            return "up"
+        elif direction=="left":
+            return "right"
+        elif direction=="right":
+            return "left"
+        
+        
     def append(self):
-        self.tail
+        
+        tail_neighbor =self.tail.current.neighbors[self.invert_direction(self.tail.direction)]
+        
+        self.tail.previous_cell = SnakeCell(
+        tail_neighbor,
+        direction =self.tail.direction
+        ) 
+        self.tail.previous_cell.next_cell = self.tail
+        self.tail = self.tail.previous_cell
+        
+    def move(self,direction):
+        # check if u hit a boundry
+        self.head.move(direction,self)
+            
+            
+    def die(self):
+        self.dead = True
+        print(self.dead)
+        print("snake is dead")
+        return
+        
     #get dir boolean?
 
     #'''
