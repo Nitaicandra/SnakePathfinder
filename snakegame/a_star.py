@@ -30,82 +30,58 @@ class AStar:
     def __init__(self,grid,snake,start,end):
         self.grid=grid
         self.snake=snake
-        #self.start=snake.head.current
-        self.start=start
+        self.start=snake.head
+        #self.start=start
         self.end=end
         self.open_set=PriorityQueue()
-        self.shortestPath= list()
+        self.shortest_path= list()
         
         
         
         self.closed_set= set() # if checked the add neighbors to set add thata cell to the closed set and remove from ope nset
         return
     
-    def G(self,cell): # path from start to current cell
-        
-        return abs((cell.x-self.start.x)+(cell.y-self.start.y))
-        
-    #def H(self, cell): #path from cell to end
-        #return abs((cell.x-self.end.x)+(cell.y-self.end.y))
+
     def H(self,cell,cell2):
         return (cell.x-cell2.x)+(cell.y-cell2.y)
 
-    def F(self, cell):
-        return self.G(cell)+self.H(cell) 
-        
 
-    def add_to_open_set(self,cell,prev_cell=None):
-        g_cost =self.F(self.start) #from start
-        h_cost =self.H(self.end) # to end
-        f_cost=g_cost+h_cost
-        self.open_set.put((f_cost,g_cost,h_cost,self.start,cell,None))
-        #placing tuple into a priority que will automatically sort based on first element of tuple
-        
-    def add_neighbors_to_set(self,cell):
-    
-        for neighbor in cell:
-            if ((neighbor not in self.open_set) and (neighbor not in self.closed_set) and (not neighbor.snake_cell==None)):
-                self.add_to_open_set(neighbor)
-                
-        # when this is called on a cell move that cell into the closed set
-        self.open_set.remove(cell)
-        self.closed_set.insert(cell)
-        
-        return
     
     def reconstruct_path(self,came_from,current):
         while current in came_from:
             current = came_from[current]
-            current.color = [0, 0, 255, 1]
-            #self.shortestPath.insert(0, current)
+            if(current.isSnake()==False):current.color = [0, 0, 255, 1]
+            self.shortest_path.insert(0, current)
     def move_snake_along_path(self):
         for key,neighbor in self.snake.head.current.neighbors.items():
-            if neighbor == self.shortestPath[0]:
-                self.snake.move(key)
+            if(len(self.shortest_path)>1):
+                if neighbor == self.shortest_path[1]:
+                    self.snake.move(key)
+        self.shortest_path.clear()
             
     def algorthm(self):
         count = 0
         open_set = PriorityQueue()
-        open_set.put((0, count, self.start))
+        open_set.put((0, count, self.start.current))
         came_from = {}
         g_score = {cell: float("inf") for row in self.grid.cells for cell in row}
-        g_score[self.start] = 0
+        g_score[self.start.current] = 0
         
         f_score = {cell: float("inf") for row in self.grid.cells for cell in row}
-        f_score[self.start] = self.H(self.start,self.end)
+        f_score[self.start.current] = self.H(self.start.current,self.end)
         
-        open_set_hash = {self.start}
+        open_set_hash = {self.start.current}
         while not open_set.empty():
             current = open_set.get()[2]
             open_set_hash.remove(current)
             
             if current == self.end:
-                #self.reconstruct_path(came_from,self.end)
-                #self.move_snake_along_path()
+                self.reconstruct_path(came_from,self.end)
+                self.move_snake_along_path()
                 return True
                 
             for key,neighbor in current.neighbors.items():
-                if(neighbor.isSnake):
+                if(neighbor.isSnake()):
                     continue
                 temp_g_score = g_score[current]+1
                 if temp_g_score< g_score[neighbor]:
@@ -116,11 +92,11 @@ class AStar:
                         count+=1
                         open_set.put((f_score[neighbor],count,neighbor))
                         open_set_hash.add(neighbor)
-                        neighbor.color=pygame.Color([255, 0, 0, 1])
+                        if(current.isSnake()==False):neighbor.color=pygame.Color([255, 0, 0, 1])
                     
                     
             if current != self.start:
-                current.color = pygame.Color([0, 255, 0, 1])
+                if(current.isSnake()==False):current.color = pygame.Color([0, 255, 0, 1])
         
         return False
             

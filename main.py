@@ -84,9 +84,10 @@ while True:
     screen.blit(surface, (0, 0))  # places the test surface at the middle origin top left by default
 
     #game_grid.snake_checker()
+    game_grid.reset_colors()
     astar.algorthm()
-    game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
-    game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
+    #game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
+    #game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
     game_grid.draw_grid(surface)
     
     game_grid.draw_grid_lines(surface)
