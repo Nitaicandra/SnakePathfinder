@@ -5,9 +5,7 @@ import cell
 import grid
 import snake_cell
 
-# the nodes of the linked list 
-# i think every snake cell should have a refrence to the gridcell its on
-# i plan on having the grid cell also have a refrence to any snake cell that on it so you can access both ways
+
 class SnakeCell:
     
     def __init__(self,
@@ -18,6 +16,7 @@ class SnakeCell:
     color = pygame.Color([34, 136, 76,1])
     
     ):
+        
         self.current = cell
         self.next_cell=next_cell#snakeCell this is the cell leading to head
         self.previous_cell=previous_cell #snakeCell this is the cell leading to tail
@@ -28,19 +27,19 @@ class SnakeCell:
         return
         
         
-        
+    
     def move(self,direction,snake):
         if self == snake.head:
-            if direction not in self.current.neighbors: #this means that the cell hit a boundry
+            #this means that the cell hit a boundry
+            if direction not in self.current.neighbors: 
                 snake.die()
                 return
+            #if u run into the the tail the tail will move out of the way so u dont die but if u run iton a cell body that isnt the tail u will die
             if (self.current.neighbors[direction].snake_cell != snake.tail):
-                if (self.current.neighbors[direction].isSnake()==True):
-                 # if u move into a cell that contains a tail then u wont die because tail will move
+                if (self.current.neighbors[direction].is_snake()==True):
                     snake.die()
                     return
-            #print(snake.invert_direction(self.direction))
-            
+
             if(snake.invert_direction(self.direction)==direction):
                 if (self.previous_cell!=None):
                     print("test")
@@ -64,13 +63,10 @@ class SnakeCell:
         
         self.current.color=self.color
         
-        if(self.previous_cell!=None):# recursivley calls move on previuos cells
-            self.previous_cell.move(self.direction,snake)#move preivous cell in the direction the current cell is facing before changing movement
-            self.direction = direction #update at end so that coreect tail movement
-            #print(self.direction)
-        
-        #move based on dir
-        # go to previuos and move to current
+        if(self.previous_cell!=None):
+            self.previous_cell.move(self.direction,snake)
+        self.direction = direction 
+    
         return
         
 

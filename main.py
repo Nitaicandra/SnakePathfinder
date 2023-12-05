@@ -10,7 +10,7 @@ width = 800
 height = width
 
 # Grid Dimensions
-cell_size = 20
+cell_size = 40
 grid_width = int(width / cell_size)
 grid_height = int(height / cell_size)
 
@@ -24,73 +24,77 @@ surface = pygame.Surface((width, height))  # width and height of the surface
 surface.fill((0, 0, 255)) #FILL WITH BLACK
 
 game_grid = Grid(grid_width, grid_height, cell_size)
-game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
-game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
+#game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
+#game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
  
-snek = Snake()
+snek = Snake(game_grid)
+game_grid.snake=snek
+game_grid.gen_fruit(snek)
 snek.StartRandomly(game_grid, grid_height, grid_width)
 
-debug= True
 last_move = "None"
-astar = AStar(game_grid,snek,game_grid.cells[0][0],game_grid.cells[5][5])
+
+debug= True
+
+astar = AStar(game_grid,snek)
+toggle_pathfinder=False
 while True:
 
-    # Tick Movement
-    # snek.move(0, snek.moving_direction, snek.snake_cells[0])
-    # Key input temporary to test snake movement
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if(debug==True):
-                if event.key == pygame.K_a:
-                    print("left")
-                    snek.move("left")
-                if event.key == pygame.K_d:
-                    print("right")
-                    snek.move("right")
-                if event.key == pygame.K_w:
-                    print("up")
-                    snek.move("up")
-                if event.key == pygame.K_s:
-                    print("down")
-                    snek.move("down")
-                if event.key == pygame.K_SPACE:
-                    print("append")
-                    snek.append()
-            else:
-                if event.key == pygame.K_a:
-                    print("left")
-                    last_move = "left"
-                if event.key == pygame.K_d:
-                    print("right")
-                    last_move = "right"
-                if event.key == pygame.K_w:
-                    print("up")
-                    last_move="up"
-                if event.key == pygame.K_s:
-                    print("down")
-                    last_move="down"
-                if event.key == pygame.K_SPACE:
-                    print("append")
-                    snek.append()
+            if event.key == pygame.K_g:
+                toggle_pathfinder= not toggle_pathfinder
+            if event.key == pygame.K_a:
+                if(debug==True):snek.move("left")
+                else:last_move = "left"
+            if event.key == pygame.K_d:
+                if(debug==True):snek.move("right")
+                else:last_move = "right"
+            if event.key == pygame.K_w:
+                if(debug==True):snek.move("up")
+                else:last_move = "up"
+            if event.key == pygame.K_s:
+                if(debug==True):snek.move("down")
+                else:last_move = "down"
+            if event.key == pygame.K_SPACE:
+                toggle_pathfinder= not toggle_pathfinder
+
                     
     if last_move != "None":
         snek.move(last_move)
         
 
-    screen.fill((175, 215, 70))  # fills the screen with a color
-    screen.blit(surface, (0, 0))  # places the test surface at the middle origin top left by default
+    screen.fill((175, 215, 70))
+    screen.blit(surface, (0, 0)) 
 
-    #game_grid.snake_checker()
+
     game_grid.reset_colors()
-    astar.algorthm()
-    #game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
-    #game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
+    if(toggle_pathfinder==True):
+        
+        if(len(sys.argv)>1 and sys.argv[1]=="m"):
+            pass
+        elif(len(sys.argv)>1 and sys.argv[1]=="s"):
+            if not astar.a_star():
+                snek.random_move()
+        elif(len(sys.argv)>1 and sys.argv[1]=="d"):
+            pass
+        else:
+            if not astar.a_star():
+                snek.random_move()
+        astar.export_data_to_csv()
+        astar.average()
+
+
     game_grid.draw_grid(surface)
     
     game_grid.draw_grid_lines(surface)
     
     pygame.display.update()
-    clock.tick(20)  # limits while loop to 20
+    
+    
+    clock.tick(70)#20
+
+
