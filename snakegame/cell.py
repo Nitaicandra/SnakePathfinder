@@ -9,7 +9,7 @@ class Cell:
         self.shape = pygame.Rect(0, 0, size, size)
         # Test Grid
         # self.color = pygame.Color([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 1])
-        self.color = pygame.Color([0, 0, 0, 1])
+        self.color = pygame.Color([34, 34, 34, 1])
         self.neighbors = {}
         
         self.x =x #position in grid
@@ -19,6 +19,6 @@ class Cell:
         return
         
     def reset_color(self):
-        self.color=pygame.Color([0, 0, 0, 1])
+        self.color=pygame.Color([34, 34, 34, 1])
     def isSnake(self):
         return self.snake_cell != None

@@ -27,11 +27,16 @@ class Path:
     
 class AStar:
     
-    def __init__(self,grid,start,end):
+    def __init__(self,grid,snake,start,end):
         self.grid=grid
+        self.snake=snake
+        #self.start=snake.head.current
         self.start=start
         self.end=end
         self.open_set=PriorityQueue()
+        self.shortestPath= list()
+        
+        
         
         self.closed_set= set() # if checked the add neighbors to set add thata cell to the closed set and remove from ope nset
         return
@@ -40,8 +45,10 @@ class AStar:
         
         return abs((cell.x-self.start.x)+(cell.y-self.start.y))
         
-    def H(self, cell): #path from cell to end
-        return abs((cell.x-self.end.x)+(cell.y-self.end.y))
+    #def H(self, cell): #path from cell to end
+        #return abs((cell.x-self.end.x)+(cell.y-self.end.y))
+    def H(self,cell,cell2):
+        return (cell.x-cell2.x)+(cell.y-cell2.y)
 
     def F(self, cell):
         return self.G(cell)+self.H(cell) 
@@ -66,12 +73,62 @@ class AStar:
         
         return
     
-    def run(self):
-    
+    def reconstruct_path(self,came_from,current):
+        while current in came_from:
+            current = came_from[current]
+            current.color = [0, 0, 255, 1]
+            #self.shortestPath.insert(0, current)
+    def move_snake_along_path(self):
+        for key,neighbor in self.snake.head.current.neighbors.items():
+            if neighbor == self.shortestPath[0]:
+                self.snake.move(key)
+            
+    def algorthm(self):
+        count = 0
+        open_set = PriorityQueue()
+        open_set.put((0, count, self.start))
+        came_from = {}
+        g_score = {cell: float("inf") for row in self.grid.cells for cell in row}
+        g_score[self.start] = 0
+        
+        f_score = {cell: float("inf") for row in self.grid.cells for cell in row}
+        f_score[self.start] = self.H(self.start,self.end)
+        
+        open_set_hash = {self.start}
+        while not open_set.empty():
+            current = open_set.get()[2]
+            open_set_hash.remove(current)
+            
+            if current == self.end:
+                #self.reconstruct_path(came_from,self.end)
+                #self.move_snake_along_path()
+                return True
+                
+            for key,neighbor in current.neighbors.items():
+                if(neighbor.isSnake):
+                    continue
+                temp_g_score = g_score[current]+1
+                if temp_g_score< g_score[neighbor]:
+                    came_from[neighbor]=current
+                    g_score[neighbor] = temp_g_score
+                    f_score[neighbor]= temp_g_score + self.H(neighbor,self.end)
+                    if neighbor not in open_set_hash:
+                        count+=1
+                        open_set.put((f_score[neighbor],count,neighbor))
+                        open_set_hash.add(neighbor)
+                        neighbor.color=pygame.Color([255, 0, 0, 1])
+                    
+                    
+            if current != self.start:
+                current.color = pygame.Color([0, 255, 0, 1])
+        
+        return False
+            
         # what is the exit condition if the open set is empty
         # will break if the last thing is found
         # how to check if set is empty 
         # how to check if 
+        '''
         self.add_to_open_set(self.start)
         
         
@@ -106,4 +163,5 @@ class AStar:
         # should be calculated every frame 
         
         return
+        '''
         

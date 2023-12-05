@@ -2,7 +2,7 @@ import pygame
 import sys
 
 sys.path.append("snakegame")
-from snakegame import Grid, Snake
+from snakegame import Grid, Snake,AStar
 
 
 # Window Dimensions
@@ -24,13 +24,15 @@ surface = pygame.Surface((width, height))  # width and height of the surface
 surface.fill((0, 0, 255)) #FILL WITH BLACK
 
 game_grid = Grid(grid_width, grid_height, cell_size)
-game_grid.cells[0][1].color = pygame.Color([255, 0, 255, 1])
+game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
+game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
  
 snek = Snake()
 snek.StartRandomly(game_grid, grid_height, grid_width)
 
 debug= True
 last_move = "None"
+astar = AStar(game_grid,snek,game_grid.cells[0][0],game_grid.cells[5][5])
 while True:
 
     # Tick Movement
@@ -82,7 +84,11 @@ while True:
     screen.blit(surface, (0, 0))  # places the test surface at the middle origin top left by default
 
     #game_grid.snake_checker()
+    astar.algorthm()
+    game_grid.cells[0][0].color = pygame.Color([255, 0, 255, 1])
+    game_grid.cells[5][5].color = pygame.Color([255, 0, 255, 1])
     game_grid.draw_grid(surface)
+    
     game_grid.draw_grid_lines(surface)
     
     pygame.display.update()

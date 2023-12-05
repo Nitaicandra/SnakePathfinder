@@ -12,7 +12,6 @@ class Grid:
         self.width = grid_width
         self.height = grid_height
         self.cell_size = cell_size
-        self.fruit= self.cells[random.randint(0, self.width)][random.randint(0, self.height)]
         
         #width then height (0,0)is in the 
         #height then width, increasing height moves it down on the page, top right corner is 0,0
@@ -59,7 +58,3 @@ class Grid:
                     self.cells[i][j].color = pygame.Color([0, 0, 255, 1])
                 else:
                     self.cells[i][j].reset_color()
-    def gen_fruit(self, snake):
-        fruit = self.cells[random.randint(0, self.width)][random.randint(0, self.height)]
-        fruit.color = pygame.Color([211, 39, 55, 1])
-        return fruit
