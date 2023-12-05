@@ -18,14 +18,14 @@ class Snake:
         dead = False
     #'''
     def StartAt(self, game_grid, x, y):
-        self.head =SnakeCell(game_grid.cells[y][x])
+        self.head =SnakeCell(game_grid.cells[y][x],color = pygame.Color([34, 100, 76,1]))
         self.tail=self.head
         return
     
     def StartRandomly(self, game_grid, grid_height, grid_width):
         random_y =random.randint(0, grid_height - 1)
         random_x =random.randint(0, grid_width - 1)
-        self.head =SnakeCell(game_grid.cells[random_y][random_x])
+        self.head =SnakeCell(game_grid.cells[random_y][random_x],color = pygame.Color([34, 100, 76,1]))
         self.tail=self.head
 
         return
@@ -41,7 +41,8 @@ class Snake:
         
         
     def append(self):
-        
+        self.size+=1
+        print(self.tail.direction)
         tail_neighbor =self.tail.current.neighbors[self.invert_direction(self.tail.direction)]
         
         self.tail.previous_cell = SnakeCell(
@@ -58,7 +59,7 @@ class Snake:
             
     def die(self):
         self.dead = True
-        print(self.dead)
+        #print(self.dead)
         print("snake is dead")
         return
         

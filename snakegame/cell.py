@@ -18,5 +18,7 @@ class Cell:
         self.is_fruit=False
         return
         
-    def default_color(self):
+    def reset_color(self):
         self.color=pygame.Color([0, 0, 0, 1])
+    def isSnake(self):
+        return self.snake_cell != None
