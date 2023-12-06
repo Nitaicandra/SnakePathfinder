@@ -1,5 +1,6 @@
 import sys
-
+import csv
+import timeit 
 
 class Dijkstras:
     def __init__(self):
@@ -11,10 +12,49 @@ class Dijkstras:
         self.distance = dict()
         # Parent of least-distant vertex
         self.parent = dict()
+        
+        self.frame_data="dijkstras_frame_data.csv"
+        open(self.frame_data, 'w').close()
+        self.averaged_data="dijkstras_averaged_data.csv"
+        open(self.averaged_data, 'w').close()
+        
+        self.start_time = None
+        self.end_time = None
+        self.elapsed_time = None
+        self.avg = None
+        self.frames = 0
+        
         return
 
-    def calculatePath(self, snake, game_grid):
+    def average(self,file=None,num=None):
 
+        elapsed_times=[]         #an empty list to store the second column
+        with open(self.frame_data, 'r') as rf:
+            reader = csv.reader(rf, delimiter=',')
+            if num == None:
+                for row in reader:
+                    elapsed_times.append(row[1])
+            elif num>0:
+                elapsed_times = [next(file) for _ in range(num)]
+                
+        sum = 0
+        for time in elapsed_times:
+            sum +=float(time)
+        average = sum/len(elapsed_times)
+        
+        with open(self.averaged_data, 'w', newline='') as file2:
+            writer = csv.writer(file2)
+            writer.writerow([f'DIJKSTRAS AVERAGE: {average}'])
+            
+
+    def export_data_to_csv(self,file=None,num=5):
+        with open(self.frame_data, 'a', newline='') as file:
+            writer = csv.writer(file)
+            #for i in range(0,num):
+            writer.writerow([f'frame {self.frames}',self.elapsed_time])
+    def calculatePath(self, snake, game_grid):
+        self.frames+=1
+        self.start_time = timeit.default_timer()
         # Clear past dijkstra runs (before fruit collection)
         self.s.clear()
         self.vs.clear()
@@ -41,6 +81,7 @@ class Dijkstras:
                     if game_grid.cells[i][j] == snake.snake_cells[0]:
                         self.distance[snake.snake_cells[0]] = 0
                         self.parent[snake.snake_cells[0]] = -1
+        
 
         distance_buffer = self.distance.copy()
         # While vs is not empty
@@ -58,6 +99,8 @@ class Dijkstras:
                     if self.distance[smallest.neighbors[neighbor]] > self.distance[smallest] + smallest.fruit_distance:
                         self.distance[smallest.neighbors[neighbor]] = self.distance[smallest] + smallest.fruit_distance
                         self.parent[smallest.neighbors[neighbor]] = smallest
+        self.end_time=timeit.default_timer()
+        self.elapsed_time = self.end_time-self.start_time
 
     def getFoodPath(self, source, target):
         stk = []

@@ -1,0 +1,28 @@
+# delta time 
+# frame rate limiter
+
+
+
+#pygame.Color('gold')
+
+
+
+create manual play button
+create dijkstart play
+create astar play
+show both split screen maybee
+create show data button
+run new data
+read write csv using pandas 
+use time module to get the time of dijkstra and astar every iteration
+you died screen 
+retart button 
+main menu
+display data and averages
+games will run until snake dies
+data will contain num of iterations, average per game
+maybe 2 graphs
+custom grid size
+create pandas 
+create astar
+make astar show considered nodes current path and selected path

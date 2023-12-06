@@ -11,7 +11,7 @@ width = 800
 height = 800
 
 # Grid Dimensions
-cell_size = 50
+cell_size = 10
 grid_width = int(width / cell_size)
 grid_height = int(height / cell_size)
 
@@ -41,6 +41,11 @@ start = True
 
 while True:
     # Keep moving the snake for each request made
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+            break
     if not movement_queue.empty():
         prev_tick = curr_tick
         game_grid.snake.move(0, movement_queue.get(), game_grid.snake.snake_cells[0])
@@ -48,6 +53,8 @@ while True:
     # Calculate the path to fruit, store for traversing later
     dijk.calculatePath(game_grid.snake, game_grid)
     path = dijk.getFoodPath(game_grid.snake.snake_cells[0], game_grid.fruit)
+    dijk.export_data_to_csv()
+    dijk.average()
 
 # Traverse the path and insert the cell to queue
     for cell in path:
@@ -62,6 +69,7 @@ while True:
     start = False
     screen.fill((175, 215, 70))  # fills the screen with a color
     screen.blit(surface, (0, 0))  # places the test surface at the middle origin top left by default
+
 
     game_grid.draw_grid(surface)
     pygame.display.update()
